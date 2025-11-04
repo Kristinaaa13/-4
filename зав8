@@ -1,0 +1,19 @@
+# 8) Обмежена сума підпослідовності (Constrained Subsequence Sum)
+# dp[i] = nums[i] + max(0, max(dp[j]) for j in [i-k, i-1])
+def constrainedSubsetSum(nums: List[int], k: int) -> int:
+    n = len(nums)
+    dp = [0] * n
+    dq = deque()  # індекси dp, значення спадають
+    best = float('-inf')
+    for i in range(n):
+        # прибрати індекси поза вікном k
+        while dq and dq[0] < i - k:
+            dq.popleft()
+        dp[i] = nums[i] + (dp[dq[0]] if dq and dp[dq[0]] > 0 else 0)
+        best = max(best, dp[i])
+        # підтримати спадаючу деку для dp
+        while dq and dp[dq[-1]] <= dp[i]:
+            dq.pop()
+        dq.append(i)
+    return best
+# Складність: O(n), пам'ять O(n) (можна зберігати лише dq та поточні).

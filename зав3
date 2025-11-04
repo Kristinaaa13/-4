@@ -1,0 +1,12 @@
+# 3) Кількість останніх викликів (вікно [t-3000, t])
+class RecentCounter:
+    def __init__(self):
+        self.q = deque()
+
+    def ping(self, t: int) -> int:
+        self.q.append(t)
+        lim = t - 3000
+        while self.q and self.q[0] < lim:
+            self.q.popleft()
+        return len(self.q)
+# Складність: O(1) амортизовано на виклик, O(w) пам'яті, w — кількість у вікні.

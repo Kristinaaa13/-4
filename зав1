@@ -1,0 +1,8 @@
+# 1) Перший унікальний символ у рядку
+def first_uniq_char(s: str) -> int:
+    cnt = Counter(s)
+    for i, ch in enumerate(s):
+        if cnt[ch] == 1:
+            return i
+    return -1
+# Складність: O(n) часу, O(1) пам'яті (алфавіт фіксований, 26).

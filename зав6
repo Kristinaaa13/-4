@@ -1,0 +1,41 @@
+# 6) Штампування послідовності (LeetCode 936) — жадібно у зворотному порядку
+def movesToStamp(stamp: str, target: str) -> List[int]:
+    s, t = stamp, list(target)
+    m, n = len(s), len(t)
+    res = []
+    changed = True
+    replaced = 0
+    seen = [False] * (n - m + 1)
+
+    def can_replace(i):
+        made = False
+        for j in range(m):
+            if t[i + j] == '?': 
+                continue
+            if t[i + j] != s[j]:
+                return False, False
+            made = True  # принаймні одну нову букву перезапишемо
+        return True, made
+
+    def do_replace(i):
+        nonlocal replaced
+        for j in range(m):
+            if t[i + j] != '?':
+                t[i + j] = '?'
+                replaced += 1
+
+    while changed:
+        changed = False
+        for i in range(n - m + 1):
+            if seen[i]: 
+                continue
+            ok, made = can_replace(i)
+            if ok and made:
+                do_replace(i)
+                seen[i] = True
+                res.append(i)
+                changed = True
+                if replaced == n:
+                    return res[::-1]
+    return []  # не вдалося за <= 10*n кроків
+# Складність: гірше випадково O(10*n*m), але на практиці проходить для n<=1000.
